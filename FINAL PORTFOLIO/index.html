@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Noman Azhar | Web Developer Portfolio</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* --- 1. Custom Fonts and Base Style --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        
+        /* Global: white background + black text */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* white */
+            color: #000000;           /* black */
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Force black text everywhere (overrides utility classes that set white) */
+        body, body * {
+            color: #000000 !important;
+            -webkit-text-fill-color: #000000 !important;
+        }
+
+        /* Custom gradient for buttons/accents (kept as accent) */
+        .neon-gradient {
+            background-image: linear-gradient(90deg, #8B5CF6, #EC4899);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* --- 2. Typography for Section Titles (Heavy/Sharp Look) --- */
+        .section-title {
+            font-size: clamp(3rem, 12vw, 7rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            line-height: 1;
+            text-transform: uppercase;
+            text-shadow: 0 0 6px rgba(139, 92, 246, 0.06);
+            -webkit-text-stroke: 0.6px rgba(0,0,0,0.03);
+        }
+
+        /* --- 3. Keyframe Animation & Reveal --- */
+        .scroll-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        .scroll-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.01);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.08);
+        }
+
+        .hero-background {
+            background-image: url('hero_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            z-index: 0;
+            filter: grayscale(20%) brightness(1.05);
+        }
+
+        /* --- 4. Ticker / Testimonials styles (three rows) --- */
+        .tickers {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          align-items: stretch;
+        }
+
+        .ticker {
+          overflow: hidden;
+          width: 100%;
+          border-radius: 12px;
+          padding: 0.4rem 0;
+          background: transparent;
+        }
+
+        .ticker-track {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          width: max-content;
+          will-change: transform;
+        }
+
+        .ticker-item {
+          min-width: 320px;
+          max-width: 420px;
+          background-color: rgba(255,255,255,0.95);
+          border: 1px solid rgba(0,0,0,0.06);
+          padding: 1rem;
+          border-radius: 10px;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.04);
+          color: #111;
+          font-size: 0.95rem;
+          line-height: 1.25;
+        }
+
+        .ticker-item .by {
+          margin-top: 0.75rem;
+          font-weight: 700;
+          font-size: 0.9rem;
+          color: #111;
+        }
+        .ticker-item .role {
+          font-size: 0.78rem;
+          color: #6b7280; /* gray-500 */
+          font-weight: 500;
+          margin-left: 0.4rem;
+        }
+<!-- Work Section -->
+  <section id="work">
+    <h2>My Work</h2>
+    <ul>
+      <li><a href="projects/tribute-page/index.html" target="_blank">Tribute Page</a></li>
+      <li><a href="projects/forum-website/index.html" target="_blank">Forum Website</a></li>
+      <li><a href="projects/parallax-website/index.html" target="_blank">Parallax Website</a></li>
+      <li><a href="projects/landing-page/index.html" target="_blank">Landing Page</a></li>
+      <li><a href="projects/restaurant-website/index.html" target="_blank">Restaurant Website</a></li>
+      <li><a href="projects/conference-webpage/index.html" target="_blank">Conference Webpage</a></li>
+      <li><a href="projects/music-store-page/index.html" target="_blank">Music Store Page</a></li>
+      <li><a href="projects/photography-site/index.html" target="_blank">Photography Site</a></li>
+    </ul>
+  </section>
+
+        /* Keyframes: scroll-left (we will translate by 50% because each track's content is duplicated) */
+        @keyframes scroll-left {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+
+        /* Row-specific animations */
+        .ticker-track.row-1 { animation: scroll-left linear infinite; animation-duration: 40s; animation-timing-function: linear; }
+        .ticker-track.row-2 { animation: scroll-left linear infinite; animation-duration: 48s; animation-direction: reverse; animation-timing-function: linear; }
+        .ticker-track.row-3 { animation: scroll-left linear infinite; animation-duration: 44s; animation-timing-function: linear; }
+
+        /* Pause animation on hover for usability */
+        .ticker:hover .ticker-track { animation-play-state: paused; }
+
+        @media (max-width: 640px) {
+          .ticker-item { min-width: 260px; max-width: 320px; font-size: 0.88rem; }
+        }
+
+        /* Modal backdrop */
+        .modal-backdrop {
+            background: rgba(0,0,0,0.45);
+        }
+    </style>
+</head>
+<body class="bg-white text-black antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-xl shadow-gray-200/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-extrabold tracking-widest neon-gradient bg-clip-text text-transparent">NOMAN AZHAR</a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="text-gray-700 hover:text-purple-600 transition duration-300 font-medium">ABOUT</a>
+                <a href="#services" class="text-gray-700 hover:text-purple-600 transition duration-300 font-medium">SERVICES</a>
+                <a href="#work" class="text-gray-700 hover:text-purple-600 transition duration-300 font-medium">WORK</a>
+                <a href="#testimonials" class="text-gray-700 hover:text-purple-600 transition duration-300 font-medium">REVIEWS</a>
+                <a href="#contact" class="text-gray-700 hover:text-purple-600 transition duration-300 font-medium">CONTACT</a>
+            </nav>
+            <a href="Resume.pdf" download class="hidden sm:block px-6 py-2 rounded-full neon-gradient text-sm font-semibold text-black hover:shadow-lg hover:shadow-purple-200/50 transition duration-300">RESUME</a>
+        </div>
+    </header>
+
+    <!-- 1. Hero Section -->
+    <section id="home" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12 flex flex-col md:flex-row items-center justify-between min-h-screen relative overflow-hidden">
+        <div class="hero-background"></div>
+        <div class="md:w-1/2 mb-12 md:mb-0 z-10 scroll-slide-up" style="transition-delay: 0.1s;">
+            <p class="text-xl text-pink-500 mb-2 font-semibold tracking-widest">HELLO, I'M</p>
+            <h1 class="text-7xl sm:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none text-black">NOMAN AZHAR</h1>
+            <p class="mt-6 text-gray-700 text-lg max-w-lg scroll-slide-up" style="transition-delay: 0.3s;">
+                A Creative Web Developer specializing in impactful digital experiences, combining design excellence with robust functionality.
+            </p>
+            <a href="#work" class="mt-8 inline-block px-8 py-3 rounded-full neon-gradient text-lg font-bold shadow-xl text-black hover:shadow-pink-200/70 transition duration-500 transform hover:scale-105 scroll-slide-up" style="transition-delay: 0.5s;">
+                VIEW MY WORK
+            </a>
+        </div>
+        <div class="md:w-1/2 flex justify-center relative z-10 scroll-slide-up" style="transition-delay: 0.7s;">
+            <div class="w-72 h-72 md:w-96 md:h-96 rounded-full p-2 neon-gradient shadow-2xl shadow-gray-200/60">
+                <img src="profile.jpg" alt="Noman Azhar Profile" class="w-full h-full object-cover rounded-full border-4 border-white"/>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. About Me Section -->
+    <section id="about" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-24 pb-24 border-t border-gray-200">
+        <h2 class="section-title text-black mb-16 scroll-slide-up">ABOUT ME</h2>
+        <div class="max-w-4xl mx-auto space-y-8 text-gray-800 text-lg md:text-xl leading-relaxed">
+            <p class="scroll-slide-up" style="transition-delay: 0.2s;">
+                I am a dedicated and results-driven developer committed to building seamless, high-performance web applications. My foundation is built on modern web standards (HTML5, CSS3, JavaScript) and robust frameworks. I don't just write code—I craft digital solutions that deliver exceptional user experiences and meet business objectives.
+            </p>
+            <p class="scroll-slide-up" style="transition-delay: 0.4s;">
+                My passion lies in transforming complex requirements into elegant, accessible, and scalable websites. From intricate forum structures to dynamic e-commerce platforms and clean landing pages, I thrive on variety and technical challenge. Achieving client goals and maintaining code quality are my top priorities in every project I undertake.
+            </p>
+        </div>
+    </section>
+
+    <!-- 3. Services Section -->
+    <section id="services" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-24 border-t border-gray-200">
+        <h2 class="section-title text-black text-center mb-16 scroll-slide-up">SERVICES</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-pink-300 transition duration-500 transform card-hover scroll-slide-up">
+                <span class="text-4xl font-extrabold text-pink-500 block mb-3">01.</span>
+                <h3 class="text-xl font-bold mb-2">Front-End Development</h3>
+                <p class="text-gray-700 text-sm">Responsive and interactive interfaces using modern HTML, CSS, and JavaScript frameworks.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-purple-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.1s;">
+                <span class="text-4xl font-extrabold text-purple-500 block mb-3">02.</span>
+                <h3 class="text-xl font-bold mb-2">Back-End Systems</h3>
+                <p class="text-gray-700 text-sm">Building robust APIs, databases, and server-side logic for high-performance applications.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-yellow-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.2s;">
+                <span class="text-4xl font-extrabold text-yellow-500 block mb-3">03.</span>
+                <h3 class="text-xl font-bold mb-2">UI/UX Design</h3>
+                <p class="text-gray-700 text-sm">Creating intuitive, accessible, and visually appealing user interfaces from scratch.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-red-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.3s;">
+                <span class="text-4xl font-extrabold text-red-500 block mb-3">04.</span>
+                <h3 class="text-xl font-bold mb-2">E-commerce Solutions</h3>
+                <p class="text-gray-700 text-sm">Developing scalable online stores and payment gateway integrations for retail businesses.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-cyan-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.4s;">
+                <span class="text-4xl font-extrabold text-cyan-500 block mb-3">05.</span>
+                <h3 class="text-xl font-bold mb-2">Database Management</h3>
+                <p class="text-gray-700 text-sm">Designing and optimizing SQL/NoSQL databases (e.g., Firestore) for efficiency and speed.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-lime-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.5s;">
+                <span class="text-4xl font-extrabold text-lime-500 block mb-3">06.</span>
+                <h3 class="text-xl font-bold mb-2">Performance Optimization</h3>
+                <p class="text-gray-700 text-sm">Ensuring fast load times and high Core Web Vitals scores for improved SEO and user retention.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-orange-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.6s;">
+                <span class="text-4xl font-extrabold text-orange-500 block mb-3">07.</span>
+                <h3 class="text-xl font-bold mb-2">CMS Integration</h3>
+                <p class="text-gray-700 text-sm">Setting up and customizing Content Management Systems like WordPress or headless CMSs.</p>
+            </div>
+            <div class="p-6 rounded-xl bg-gray-100 border border-gray-200 hover:border-indigo-300 transition duration-500 transform card-hover scroll-slide-up" style="transition-delay: 0.7s;">
+                <span class="text-4xl font-extrabold text-indigo-500 block mb-3">08.</span>
+                <h3 class="text-xl font-bold mb-2">Technical SEO</h3>
+                <p class="text-gray-700 text-sm">Implementing structured data, schema markup, and site architecture best practices.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Projects/Work Section (All 8 project cards restored) -->
+    <section id="work" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-24 border-t border-gray-200">
+        <h2 class="section-title text-black text-center mb-16 scroll-slide-up">SELECTED WORK</h2>
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Project Card 1: Tribute Page -->
+            <div id="project-tribute" data-github="https://github.com/nomanazhar101/Tribute-Project" data-title="Tribute Page" data-details="A clean, responsive tribute page focusing on semantic HTML and accessibility." data-image="image1.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up">
+                <img src="image1.jpg" alt="Tribute Page Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-pink-500 group-hover:underline">01. Tribute Page</h3>
+                    <p class="text-sm text-gray-700">Simple Web Design</p>
+                </div>
+            </div>
+
+            <!-- Project Card 2: Website including Forum -->
+            <div id="project-forum" data-github="https://github.com/nomanazhar101/Forum" data-title="Website with Forum" data-details="A full-stack website integrating a dynamic, user-friendly discussion forum with secure authentication." data-image="image2.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.1s;">
+                <img src="image2.jpg" alt="Forum Website Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-purple-500 group-hover:underline">02. Website including Forum</h3>
+                    <p class="text-sm text-gray-700">Full-Stack Application</p>
+                </div>
+            </div>
+
+            <!-- Project Card 3: Parallax Website -->
+            <div id="project-parallax" data-github="https://github.com/nomanazhar101/Parallax.html" data-title="Parallax Website" data-details="A visually stunning site utilizing complex CSS Parallax scrolling effects for depth and engagement." data-image="image3.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.2s;">
+                <img src="image3.jpg" alt="Parallax Website Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-yellow-500 group-hover:underline">03. Parallax Website</h3>
+                    <p class="text-sm text-gray-700">Advanced CSS/UX</p>
+                </div>
+            </div>
+
+            <!-- Project Card 4: Landing Page -->
+            <div id="project-landing" data-github="https://github.com/nomanazhar101/week-9" data-title="High-Converting Landing Page" data-details="A clean, conversion-focused landing page optimized for fast loading and mobile responsiveness." data-image="image4.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.3s;">
+                <img src="image4.jpg" alt="Landing Page Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-red-500 group-hover:underline">04. Landing Page</h3>
+                    <p class="text-sm text-gray-700">Marketing & Lead Generation</p>
+                </div>
+            </div>
+            
+            <!-- Project Card 5: Restaurant Website -->
+            <div id="project-restaurant" data-github="https://github.com/nomanazhar101/Restaurant" data-title="Restaurant Website" data-details="An attractive site designed for a restaurant, featuring online booking, menu display, and gallery." data-image="image5.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.4s;">
+                <img src="image5.jpg" alt="Restaurant Website Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-cyan-500 group-hover:underline">05. Restaurant Website</h3>
+                    <p class="text-sm text-gray-700">Hospitality Design</p>
+                </div>
+            </div>
+            
+            <!-- Project Card 6: Conference Webpage -->
+            <div id="project-conference" data-github="https://github.com/nomanazhar101/Week-10" data-title="Conference Webpage" data-details="A modern event page for a conference, including speaker schedules, ticket purchasing, and map integration." data-image="image6.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.5s;">
+                <img src="image6.jpg" alt="Conference Webpage Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-lime-500 group-hover:underline">06. Conference Webpage</h3>
+                    <p class="text-sm text-gray-700">Event & Information Hub</p>
+                </div>
+            </div>
+            
+            <!-- Project Card 7: Music Store Page -->
+            <div id="project-music" data-github="https://github.com/nomanazhar101/Music" data-title="Music Store Page" data-details="An e-commerce prototype for selling music/merchandise, featuring a clean product grid and checkout process." data-image="image7.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.6s;">
+                <img src="image7.jpg" alt="Music Store Page Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-orange-500 group-hover:underline">07. Music Store Page</h3>
+                    <p class="text-sm text-gray-700">E-commerce Prototype</p>
+                </div>
+            </div>
+
+            <!-- Project Card 8: Photography Site -->
+            <div id="project-photography" data-github="https://github.com/nomanazhar101/Photogrpahy" data-title="Photography Site" data-details="A minimal, high-impact gallery site designed to perfectly showcase high-resolution photography work." data-image="image8.jpg" class="project-card group rounded-xl overflow-hidden cursor-pointer shadow-lg card-hover scroll-slide-up" style="transition-delay: 0.7s;">
+                <img src="image8.jpg" alt="Photography Site Screenshot" class="w-full h-48 object-cover transition duration-500 group-hover:scale-105"/>
+                <div class="p-4 bg-white">
+                    <h3 class="text-xl font-bold text-indigo-500 group-hover:underline">08. Photography Site</h3>
+                    <p class="text-sm text-gray-700">Visual Portfolio</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- More About Work and Achievements -->
+        <div class="mt-20 max-w-4xl mx-auto pt-10 border-t border-gray-200">
+            <h3 class="text-3xl font-extrabold text-black mb-6 scroll-slide-up">Achievements & Philosophy</h3>
+            <div class="text-gray-800 text-lg space-y-4 scroll-slide-up" style="transition-delay: 0.2s;">
+                <p>My work philosophy is centered on <strong>Clean Code and Timely Delivery</strong>. I am proud to have completed over 50 projects with 100% client satisfaction, specializing in making complex applications feel effortless to the end-user.</p>
+                <p>Key achievements include optimizing site performance to achieve top-tier Google PageSpeed scores (95+) on several client projects and building robust, real-time data integration systems. I am constantly learning the latest technologies to ensure my work is modern, secure, and future-proof.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Testimonials Section (3 continuous ticker rows, alternating directions) -->
+    <section id="testimonials" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-24 border-t border-gray-200">
+        <h2 class="section-title text-black mb-12 scroll-slide-up text-center">CLIENT REVIEWS</h2>
+
+        <div id="tickersContainer" class="tickers scroll-slide-up" style="transition-delay: 0.3s;">
+            <!-- Row 1: scroll left -->
+            <div class="ticker" aria-hidden="false">
+                <div id="tickerTrack1" class="ticker-track row-1" aria-hidden="true"></div>
+            </div>
+
+            <!-- Row 2: scroll right -->
+            <div class="ticker" aria-hidden="false">
+                <div id="tickerTrack2" class="ticker-track row-2" aria-hidden="true"></div>
+            </div>
+
+            <!-- Row 3: scroll left -->
+            <div class="ticker" aria-hidden="false">
+                <div id="tickerTrack3" class="ticker-track row-3" aria-hidden="true"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Contact Section -->
+    <section id="contact" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-24 border-t border-gray-200">
+        <h2 class="section-title text-center text-black mb-16 scroll-slide-up">LET'S CONNECT</h2>
+        <div class="grid lg:grid-cols-2 gap-12 items-start scroll-slide-up" style="transition-delay: 0.3s;">
+            <div>
+                <h3 class="text-2xl font-bold text-pink-500 mb-4">Ready to Start a Project?</h3>
+                <p class="text-gray-700 mb-6">If you have a digital challenge, let's discuss how my expertise can bring your vision to life with precision and creativity.</p>
+                <div class="space-y-3">
+                    <p class="text-xl font-semibold text-black">Email:</p>
+                    <a href="mailto:noman@azhardev.com" class="text-lg text-purple-600 hover:text-purple-800 transition duration-300">noman@azhardev.com</a>
+                    <p class="text-xl font-semibold text-black pt-4">Connect:</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-600 hover:text-black transition duration-300">LinkedIn</a>
+                        <a href="#" class="text-gray-600 hover:text-black transition duration-300">GitHub</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <form class="space-y-6 p-8 bg-white rounded-xl border border-gray-200 shadow-sm">
+                <div>
+                    <input type="text" placeholder="Full Name" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:border-pink-500 focus:ring-0 text-black placeholder-gray-500">
+                </div>
+                <div>
+                    <input type="email" placeholder="Email Address" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:border-pink-500 focus:ring-0 text-black placeholder-gray-500">
+                </div>
+                <div>
+                    <textarea placeholder="Tell me about your project..." rows="4" required class="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg focus:border-pink-500 focus:ring-0 text-black placeholder-gray-500"></textarea>
+                </div>
+                <button type="submit" class="w-full px-6 py-3 rounded-full neon-gradient text-lg font-bold text-black hover:shadow-lg hover:shadow-purple-200/70 transition duration-300">
+                    SEND MESSAGE
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-10 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h4 class="text-2xl font-extrabold text-black mb-2">NOMAN AZHAR</h4>
+            <p class="text-sm text-gray-600">&copy; 2025. Developed with precision.</p>
+        </div>
+    </footer>
+
+<!-- Work Section -->
+  <section id="work">
+    <h2>My Work</h2>
+    <ul>
+      <li><a href="projects/tribute-page/index.html" target="_blank">Tribute Page</a></li>
+      <li><a href="projects/forum-website/index.html" target="_blank">Forum Website</a></li>
+      <li><a href="projects/parallax-website/index.html" target="_blank">Parallax Website</a></li>
+      <li><a href="projects/landing-page/index.html" target="_blank">Landing Page</a></li>
+      <li><a href="projects/restaurant-website/index.html" target="_blank">Restaurant Website</a></li>
+      <li><a href="projects/conference-webpage/index.html" target="_blank">Conference Webpage</a></li>
+      <li><a href="projects/music-store-page/index.html" target="_blank">Music Store Page</a></li>
+      <li><a href="projects/photography-site/index.html" target="_blank">Photography Site</a></li>
+    </ul>
+  </section>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center hidden" onclick="closeModal()">
+        <div class="bg-white rounded-xl max-w-3xl w-11/12 m-4 p-8 relative shadow-2xl shadow-gray-300" onclick="event.stopPropagation()">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-600 hover:text-pink-500 transition duration-300">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 id="modalTitle" class="text-4xl font-bold text-black mb-4 neon-gradient bg-clip-text text-transparent">Project Title</h3>
+            <div id="modalImageContainer" class="mb-6 rounded-lg overflow-hidden border border-gray-200">
+            </div>
+            <p id="modalDetails" class="text-gray-700 mb-6 text-lg">Detailed information about the project goes here.</p>
+            <a id="modalLiveLink" href="#" target="_blank" class="px-6 py-3 rounded-full neon-gradient text-lg font-bold text-black inline-block hover:shadow-lg hover:shadow-pink-200/50 transition duration-300">
+                VIEW LIVE SITE
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // --- Testimonial Data (50 Placeholder Reviews) ---
+        const testimonialsData = [];
+        const names = ["Aisha K.", "Bilal Z.", "Zara T.", "Faisal R.", "Hina G.", "Kamran M.", "Laila S.", "Omar D.", "Sadia Q.", "Tariq V."];
+        const titles = ["CEO, Tech Innovate", "Founder, Creative Hub", "Marketing Manager", "Lead Designer", "Startup Consultant", "Project Director", "E-commerce Specialist", "Small Business Owner", "Event Organizer", "Digital Artist"];
+        
+        for (let i = 1; i <= 50; i++) {
+            const nameIndex = i % names.length;
+            const titleIndex = i % titles.length;
+            testimonialsData.push({
+                text: `Noman delivered an outstanding, high-performance website that truly exceeded our expectations (Review ${i}/50). His attention to detail and communication were flawless, resulting in a project delivered ahead of schedule. Highly recommended for complex development work.`,
+                name: names[nameIndex],
+                title: titles[titleIndex]
+            });
+        }
+
+        // Utility: build markup for a set of testimonials, duplicated for smooth loop
+        function buildTickerHtml(data) {
+            let html = '';
+            data.forEach(d => {
+                // sanitize/minimal escape to avoid accidental markup injection
+                const quote = d.text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const person = d.name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const role = d.title.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                html += `
+                    <div class="ticker-item">
+                        <div class="quote">${quote}</div>
+                        <div class="by">${person} <span class="role">— ${role}</span></div>
+                    </div>
+                `;
+            });
+            // duplicate content for seamless loop
+            return html + html;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. SCROLL REVEAL LOGIC (same as before)
+            const targets = document.querySelectorAll('.scroll-slide-up');
+            const observer = new IntersectionObserver((entries, observerInst) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observerInst.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
+            targets.forEach(target => observer.observe(target));
+
+            // ------------------------------
+            // 2. TICKER RENDERING (three rows with different subsets)
+            // ------------------------------
+            const t1 = document.getElementById('tickerTrack1');
+            const t2 = document.getElementById('tickerTrack2');
+            const t3 = document.getElementById('tickerTrack3');
+
+            if (t1 && t2 && t3) {
+                // Create three different subsets to avoid identical order
+                // Subset 1: original order (all 50)
+                const subset1 = testimonialsData.slice(0);
+
+                // Subset 2: rotated by 7 (so starts at 8th review)
+                const rotateBy = 7;
+                const subset2 = testimonialsData.slice(rotateBy).concat(testimonialsData.slice(0, rotateBy));
+
+                // Subset 3: split and reverse for a visibly different rhythm (rotate by 19 then reverse)
+                const rotateBy3 = 19;
+                const subset3 = testimonialsData.slice(rotateBy3).concat(testimonialsData.slice(0, rotateBy3)).reverse();
+
+                // Build markup (each duplicated inside the function)
+                t1.innerHTML = buildTickerHtml(subset1);
+                t2.innerHTML = buildTickerHtml(subset2);
+                t3.innerHTML = buildTickerHtml(subset3);
+            }
+
+            // ------------------------------
+            // 3. MODAL/LIGHTBOX LOGIC (project cards)
+            // ------------------------------
+            const projectCards = document.querySelectorAll('.project-card');
+            const modal = document.getElementById('projectModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDetails = document.getElementById('modalDetails');
+            const modalLiveLink = document.getElementById('modalLiveLink');
+            const modalImageContainer = document.getElementById('modalImageContainer');
+
+            projectCards.forEach(card => {
+                card.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    
+                    const title = card.getAttribute('data-title') || 'Project';
+                    const details = card.getAttribute('data-details') || '';
+        const githubLink = card.getAttribute('data-github');
+                    const imageSrc = card.getAttribute('data-image') || (card.querySelector('img') ? card.querySelector('img').src : '');
+
+                    modalTitle.textContent = title;
+                    modalDetails.textContent = details;
+                    modalLiveLink.href = githubLink;
+                    modalLiveLink.textContent = `VIEW GITHUB: ${title}`;
+
+                    modalImageContainer.innerHTML = imageSrc ? `<img src="${imageSrc}" alt="${title} Screenshot" class="w-full h-auto object-cover"/>` : '';
+
+                    modal.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                });
+            });
+
+            // Global function to close the modal
+            window.closeModal = function() {
+                const modalEl = document.getElementById('projectModal');
+                if (modalEl) modalEl.classList.add('hidden');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<script>
+var swiper = new Swiper(".mySwiper", {
+    effect: "coverflow",
+    grabCursor: true,
+    centeredSlides: true,
+    slidesPerView: "auto",
+    loop: true,
+    coverflowEffect: { rotate: 20, stretch: 0, depth: 150, modifier: 1, slideShadows: true },
+    pagination: { el: ".swiper-pagination", clickable: true },
+    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" }
+});
+</script>
+</body>
+
+</html>
